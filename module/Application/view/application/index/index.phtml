@@ -1,0 +1,18 @@
+<div class="jumbotron" style="text-align: center;">
+	<h1>PomoTimer</h1>
+		<div id="signin">
+			<?php if(!is_null($this->token) || $this->token !== "") {?>
+				<script>
+					sessionStorage.setItem("access_token", "<?= $this->token ?>");
+				</script>
+			<?php }?>
+			<script>
+				if(sessionStorage.getItem("access_token") === null) {
+					$("#signin").append("<h3>Not logged in</h3>");
+					$("#signin").append("<p><a href='#' id='githubLogin'>Github Log In</a></p>");
+				}
+			</script>
+		</div>
+
+
+</div>
