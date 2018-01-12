@@ -35,15 +35,12 @@ abstract class AbstractOAuth2Client{
 
 	public function getInfo(){
 		if(is_object($this->session->info)) {
-			mail("mario.tilli", "token esistente", "");
 			return $this->session->info;
 		} elseif(isset($this->session->token->access_token)) {
-			mail("mario.tilli", "nuovo token", "");
 			$urlProfile = $this->options->getInfoUri() . '?access_token='.$this->session->token->access_token;
 			
 			$client = $this->getHttpclient()
 							->resetParameters(true)
-							//->setHeaders(array('Accept-encoding' => ''))
 							->setHeaders(array('Accept-encoding' => 'gzip, deflate, identity'))
 							->setMethod(Request::METHOD_GET)
 							->setUri($urlProfile);
@@ -51,7 +48,6 @@ abstract class AbstractOAuth2Client{
 			$retVal = $response->getBody();
 
 			if(strlen(trim($retVal)) > 0) {
-				//\Zend\Debug\Debug::dump($response->getBody());
 				$this->session->info = \Zend\Json\Decoder::decode($retVal);
 				return $this->session->info;
 			} else {
@@ -107,6 +103,11 @@ abstract class AbstractOAuth2Client{
 		return $this->session;
 	}
 	
+	public function destroySession() {
+		$this->session->getManager()->getStorage()->clear('ZendOAuth2_'.get_class($this));
+		return $this;
+	}
+
 	public function getProvider() {
 		return $this->providerName;
 	}

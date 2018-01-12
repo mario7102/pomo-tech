@@ -23,7 +23,6 @@ class OAuth2Adapter implements AdapterInterface, EventManagerAwareInterface {
 	
 	//aggiunto per l'autenticazione ad ogni chiamata delle API
 	public function setToken($token) {
-		die($token);
 		$this->token = $token;
 	}
 
@@ -40,7 +39,6 @@ class OAuth2Adapter implements AdapterInterface, EventManagerAwareInterface {
 			$args['token'] = (array)$this->client->getSessionToken();
 			
 			$args = $this->getEventManager()->prepareArgs($args);
-
 			$this->getEventManager()->trigger('oauth2.success', $this, $args);
 			return new Result($args['code'], $args['info']);
 		} else {

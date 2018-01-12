@@ -53,7 +53,11 @@ class IndexController extends AbstractActionController {
 	}
 
 	public function logoutAction(){
-		
+		$this->authService->clearIdentity();
+		$this->client->destroySession();
+		$json = new JsonModel();
+		$json->setVariable("loggedout", "success");
+		return $json;
 	}
 
 	public function getAuthService() {

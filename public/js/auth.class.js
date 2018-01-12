@@ -12,6 +12,10 @@ AuthClient.prototype = {
 			event.preventDefault;
 			that.getState();
 		});
+		$("body").on("click", this.selectors.logout, function(event){
+			event.preventDefault;
+			that.logout();
+		});
 	},
 
 	getState: function(){
@@ -22,11 +26,22 @@ AuthClient.prototype = {
 				window.location = "https://github.com/login/oauth/authorize?client_id="+json.params.cid+"&scope="+json.params.scope+"&state="+json.params.state;
 			},
 		});
+	},
+
+	logout: function(){
+		sessionStorage.clear();
+		$.ajax({
+			url:"/auth/logout",
+			success: function(json) {
+				window.location = "/";
+			},
+		});
 	}
 };
 
 AuthClient.prototype.selectors = {
-	githubLogin : "#githubLogin"
+	githubLogin : "#githubLogin",
+	logout : "a.logout"
 };
 
 $().ready(function(e){
