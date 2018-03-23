@@ -1,0 +1,26 @@
+<?php
+return array (
+	'doctrine' => array (
+		'configuration' => array (
+			'orm_default' => array (
+					'generate_proxies' => false,
+					'proxy_dir' => __DIR__ . '/../../data/DoctrineORMModule/Proxies/' 
+			) 
+		),
+		'connection' => array (
+			'orm_default' => array (
+				'driverClass' => '',
+				'params' => array (
+						'host' => '',
+						'port' => '',
+						'user' => '',
+						'password' => '',
+						'dbname' => '',
+						'driverOptions' => array (
+							\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8' 
+					)
+				)
+			)
+		)
+	)
+);

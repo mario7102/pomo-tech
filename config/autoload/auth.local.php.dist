@@ -1,0 +1,13 @@
+<?php
+
+return [
+	"oauth2" => [
+		"github" => [
+			"client_id" => "",
+			"client_secret" => "",
+			"token_uri" => "",
+			"info_uri" => "",
+			"scope" => ""
+		]
+	]
+];
