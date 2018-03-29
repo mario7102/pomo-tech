@@ -78,5 +78,8 @@ return [
 		'strategies' => [
 			'ViewJsonStrategy',
 		],
+	],
+	'listeners' => [
+		\Application\Service\LoadProfileListener::class
 	]
 ];

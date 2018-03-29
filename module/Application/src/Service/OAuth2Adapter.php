@@ -33,13 +33,15 @@ class OAuth2Adapter implements AdapterInterface, EventManagerAwareInterface {
 		}
 		if(is_object($this->client) AND is_object($this->client->getInfo())) { 
 			
+			$oauth_success_event = empty($this->client->getAuthSuccessEvent()) ? 'oauth2.success' : trim(strtolower($this->client->getAuthSuccessEvent()));
+
 			$args['code'] = Result::SUCCESS;
 			$args['info'] = (array)$this->client->getInfo();
 			$args['provider'] = $this->client->getProvider();
 			$args['token'] = (array)$this->client->getSessionToken();
 			
 			$args = $this->getEventManager()->prepareArgs($args);
-			$this->getEventManager()->trigger('oauth2.success', $this, $args);
+			$this->getEventManager()->trigger($oauth_success_event, $this, $args);
 			return new Result($args['code'], $args['info']);
 		} else {
 			return new Result(Result::FAILURE, $this->client->getError());

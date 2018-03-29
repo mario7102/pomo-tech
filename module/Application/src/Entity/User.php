@@ -57,6 +57,12 @@ class User
 	 * @var int
 	 */
 	private $status;
+
+	/**
+	 * @ORM\Embedded(class="Application\Entity\GithubUser")
+	 * @var GithubUser
+	 */
+	protected $githubUser;
 	
 	public static function create(User $createdBy = null) {
 		$rv = new self();
@@ -193,5 +199,17 @@ class User
 	 */
 	public function getStatus() {
 		return $this->status;
+	}
+
+	/**
+	* @param GithubUser
+	**/
+	public function setGithubUser(GithubUser $github_user){
+		$this->github_user = $github_user;
+		return $this;
+	}
+
+	public function getGithubUser(){
+		return $this->github_user;
 	}
 }

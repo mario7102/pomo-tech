@@ -28,6 +28,7 @@ abstract class AbstractOAuth2Client{
 
 	abstract public function getUrlParams();
 	abstract public function getToken(Request $request);
+	abstract public function getAuthSuccessEvent();
 	
 	public function __construct(){
 		$this->session = new Container('ZendOAuth2_'.get_class($this));
@@ -65,9 +66,8 @@ abstract class AbstractOAuth2Client{
 		if(is_array($this->options->getScope()) AND count($this->options->getScope()) > 0) {
 			$str = urlencode(implode($glue, array_unique($this->options->getScope())));
 			return '&scope=' . $str;
-		} else {
-			return '';
 		}
+		return '&scope=' . $this->options->getScope();
 	}
 	
 	public function getState() {

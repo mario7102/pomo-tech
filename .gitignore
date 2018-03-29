@@ -8,3 +8,5 @@ Vagrantfile
 *.lock
 .dist
 .phpintel
+cli-config.php
+bootstrap_doctrine.php

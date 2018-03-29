@@ -61,6 +61,16 @@ class Module {
 					$adapter->setOAuth2Client($client);
 					return $adapter;
 				},
+				\Application\Service\UserService::class => function($serviceLocator) {
+					$entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
+					$service = new \Application\Service\UserService($entityManager);
+					return $service;
+				},
+				\Application\Service\LoadProfileListener::class => function ($serviceLocator) {
+					return new \Application\Service\LoadProfileListener(
+						$serviceLocator->get(\Application\Service\UserService::class)
+					);
+				},
 				\Zend\Authentication\AuthenticationService::class => function ($serviceLocator) {
 					$adapter = $serviceLocator->get(\Application\Service\OAuth2Adapter::class);
 					$authService = new \Zend\Authentication\AuthenticationService();

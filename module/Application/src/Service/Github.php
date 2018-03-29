@@ -8,6 +8,7 @@ use Zend\Http\Request;
 class Github extends AbstractOAuth2Client{
 
 	protected $providerName = 'github';
+	const AUTH_SUCCESS_EVENT = "github.success";
 
 	public function getUrlParams() {
 		return [
@@ -15,6 +16,10 @@ class Github extends AbstractOAuth2Client{
 			'state' => $this->generateState(),
 			'scope' => $this->getScope(',')
 		];
+	}
+
+	public function getAuthSuccessEvent() {
+		return self::AUTH_SUCCESS_EVENT;
 	}
 
 	public function getToken(Request $request) {
