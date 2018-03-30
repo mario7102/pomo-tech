@@ -4,7 +4,7 @@ namespace Application\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity
@@ -13,21 +13,26 @@ use Rhumsaa\Uuid\Uuid;
  */
 class User
 {
+
+	const ROLE_USER = "user";
+	const ROLE_ADMIN = "admin";
+
 	/**
 	 * @ORM\Id @ORM\Column(type="string")
 	 * @var string
 	 */
 	protected $id;
 	/**
-	 * @ORM\Column(type="string", length=100, nullable=TRUE)
+	 * @ORM\Column(type="string", length=200, nullable=TRUE)
 	 * @var string
 	 */
-	protected $firstname;
+	protected $name;
+
 	/**
-	 * @ORM\Column(type="string", length=100, nullable=TRUE)
+	 * @ORM\Column(type="string", length=200, nullable=TRUE)
 	 * @var string
 	 */
-	protected $lastname;
+	protected $email;
 
 	/**
 	 * @ORM\Column(type="datetime")
@@ -53,21 +58,20 @@ class User
 	protected $mostRecentEditBy;
 
 	/**
-	 * @ORM\Column(type="integer")
-	 * @var int
-	 */
-	private $status;
-
-	/**
 	 * @ORM\Embedded(class="Application\Entity\GithubUser")
 	 * @var GithubUser
 	 */
 	protected $githubUser;
+
+	/**
+	 * @ORM\Column(type="string")
+	 * @var string 
+	 */
+	private $role = self::ROLE_USER;
 	
 	public static function create(User $createdBy = null) {
 		$rv = new self();
 		$rv->id = Uuid::uuid4()->toString();
-		$rv->status = self::STATUS_ACTIVE;
 		$rv->createdAt = new \DateTime();
 		$rv->createdBy = $createdBy;
 		$rv->mostRecentEditAt = $rv->createdAt;
@@ -82,32 +86,18 @@ class User
 		return $this->id;
 	}
 	/**
-	 * @param string $firstname
+	 * @param string $name
 	 * @return $this
 	 */
-	public function setFirstname($firstname) {
-		$this->firstname = $firstname;
+	public function setName($name) {
+		$this->name = $name;
 		return $this;
 	}
 	/**
 	 * @return string
 	 */
-	public function getFirstname() {
-		return $this->firstname;
-	}
-	/**
-	 * @param string $lastname
-	 * @return $this
-	 */
-	public function setLastname($lastname) {
-		$this->lastname = $lastname;
-		return $this;
-	}
-	/**
-	 * @return string
-	 */
-	public function getLastname() {
-		return $this->lastname;
+	public function getName() {
+		return $this->name;
 	}
 
 	/**
@@ -205,11 +195,52 @@ class User
 	* @param GithubUser
 	**/
 	public function setGithubUser(GithubUser $github_user){
-		$this->github_user = $github_user;
+		$this->githubUser = $github_user;
 		return $this;
 	}
 
 	public function getGithubUser(){
-		return $this->github_user;
+		return $this->githubUser;
+	}
+
+	public function setEmail($email){
+		$this->email = $email;
+		return $this;
+	}
+
+	public function getEmail() {
+		return $this->email;
+	}
+
+	public function setRole($role) {
+		$this->role = $role;
+		return $this;
+	}
+
+	public function getRole() {
+		return $this->role;
+	}
+
+	public function updateInfo($info){
+		if(isset($info['github_avatar'])){
+			$this->githubUser->setAvatar($info['github_avatar']);
+		}
+		if(isset($info['name'])){
+			$this->name = $info['name'];
+		}
+		if(isset($info['github_user_url'])){
+			$this->githubUser->setUrl($info['github_user_url']);
+		}
+		if(isset($info['email'])){
+			$this->email = $info['email'];
+		}
+		return $this;
+	}
+
+	public function getAvatarUrl(){
+		if(is_null($this->githubUser)){
+			return "";
+		}
+		return $this->githubUser->getAvatar();
 	}
 }

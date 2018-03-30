@@ -28,7 +28,7 @@ class OAuth2Adapter implements AdapterInterface, EventManagerAwareInterface {
 
 	public function authenticate(){
 		//aggiunto per l'autenticazione ad ogni chiamata delle API
-		if(!is_null($this->token) && $this->token !== $this->client->getSessionToken()) {
+		if(!is_null($this->token) && $this->token !== $this->client->getSessionToken()->access_token) {
 			return new Result(Result::FAILURE_CREDENTIAL_INVALID, "Token mismatch");
 		}
 		if(is_object($this->client) AND is_object($this->client->getInfo())) { 

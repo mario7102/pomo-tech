@@ -61,43 +61,19 @@ class LoadProfileListener implements ListenerAggregateInterface
 	public function loadGithubUser(Event $event) {
 		$args = $event->getParams();
 		$info = $args['info'];
-		var_dump($info);die();
-		$user = $this->userService->findUserByUsername($info['login']);
+		$user = $this->userService->findUserByGithubUsername($info['login']);
 		if (is_null($user)) {
 			$user = $this->userService->subscribeUser($info);
+			$this->userService->addGithubUser($user, $info);
 			$args['info'] = $user;
 			return;
 		}
 		$user->updateInfo(array(
-			"avatar" => $info['avatar_url'],
+			"github_avatar" => $info['avatar_url'],
 			"name" => $info['name'],
 			"github_user_url" => $info['html_url']
 		));
 		$this->userService->saveUser($user);
-		$args['info'] = $user;
-	}
-
-	public function loadGoogleJWTUser(Event $event)
-	{
-		$args = $event->getParams();
-		$info = $args['info'];
-		$user = $this->userService->findUserByEmail($info['email']);
-
-		if (is_null($user)) {
-			$user = $this->userService->subscribeUser($info);
-			$args['info'] = $user;
-
-			return;
-		}
-
-		$user->updateInfo(
-			$info['given_name'],
-			$info['family_name'],
-			isset($info['picture']) ? $info['picture'] : null
-		);
-
-		$this->userService->saveUser($user);
-
 		$args['info'] = $user;
 	}
 }

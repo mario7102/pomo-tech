@@ -16,6 +16,10 @@ AuthClient.prototype = {
 			event.preventDefault;
 			that.logout();
 		});
+		$("body").on("userloggedin", "#userInfo", function(event){
+			event.preventDefault;
+			that.getUserInfo();
+		});
 	},
 
 	getState: function(){
@@ -34,6 +38,20 @@ AuthClient.prototype = {
 			url:"/auth/logout",
 			success: function(json) {
 				window.location = "/";
+			},
+		});
+	},
+
+	getUserInfo: function(){
+		var token = sessionStorage.access_token;
+		$.ajax({
+			type: "GET",
+			beforeSend: function(request) {
+				request.setRequestHeader("GITHUB-JWT", sessionStorage.access_token);
+			},
+			url:"/auth/getuserinfo",
+			success: function(json) {
+				$("#userInfo").html('<img alt="'+json.name+'" src="'+json.avatar_url+'" height="28" style="border-radius: 50%;"> '+json.name);
 			},
 		});
 	}

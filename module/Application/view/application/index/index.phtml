@@ -5,8 +5,11 @@
 				<script>
 					sessionStorage.setItem("access_token", "<?= $this->token ?>");
 					$("a.logout").removeClass("hide");
+					$(function(){
+						//DOM READY
+						$("#userInfo").trigger("userloggedin");
+					});
 				</script>
-				SONO LOGGATO: token-> <?php echo $this->token; ?>
 			<?php }?>
 			<script>
 				if(sessionStorage.getItem("access_token") === null || sessionStorage.getItem("access_token") === "") {

@@ -60,6 +60,18 @@ class IndexController extends AbstractActionController {
 		return $json;
 	}
 
+	public function getuserinfoAction(){
+		$loggedUser = $this->authService->getIdentity();
+		if (is_null($loggedUser)) {
+			$this->response->setStatusCode(401);
+			return $this->response;
+		}
+		$json = new JsonModel();
+		$json->setVariable("avatar_url", $loggedUser->getAvatarUrl());
+		$json->setVariable("name", $loggedUser->getName());
+		return $json;
+	}
+
 	public function getAuthService() {
 		return $this->authService;
 	}

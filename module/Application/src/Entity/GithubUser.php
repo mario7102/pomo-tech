@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GithubUser {
 
 	/**
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", nullable=TRUE)
 	 * @var string
 	 */
 	private $username;
@@ -21,6 +21,11 @@ class GithubUser {
 	 */
 	private $url;
 
+	/**
+	 * @ORM\Column(type="string", nullable=TRUE)
+	 * @var string
+	 */
+	private $avatar;
 
 	public function __construct($username){
 		$this->username = $username;
@@ -37,5 +42,14 @@ class GithubUser {
 
 	public function getUrl(){
 		return $this->url;
+	}
+
+	public function setAvatar($url){
+		$this->avatar = $url;
+		return $this;
+	}
+
+	public function getAvatar() {
+		return $this->avatar;
 	}
 }
